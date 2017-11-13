@@ -33,7 +33,22 @@
 
 // And it works
 
-const primes = [2,3,5,7,11,13,17,19];
+const START_NUMBER = 1; // This code assumes that START_NUMBER is always 1
+const END_NUMBER = 20;
+
+const evalNumbers = Array.from({length: END_NUMBER}, (val, index) => START_NUMBER + index);
+
+const primes = [];
+evalNumbers.map(num => {
+  // first 2 conditions assume that START_NUMBER is always 1
+  if (num <= 1) return;
+  if (primes.length === 0) return primes.push(num);
+  // based on understanding that a number is a prime if not divisble evenly by
+  // any prime number below the square root of the number being evalauated
+  if (!primes.some(prime => ((prime <= Math.sqrt(num)) && (num % prime === 0)))) {
+    primes.push(num);
+  };
+});
 
 // seed initial key value pairs for prime factors
 const primeFactors = {}
@@ -74,11 +89,9 @@ const recursiveFactorTree = function recursion(num) {
 }
 
 // loop through numbers from 2 to 20 (1 not needed as every integer is divisble by 1)
-for (let i = 2; i <= 20; i++) {
-  recursiveFactorTree(i);
-}
+evalNumbers.map(num => recursiveFactorTree(num));
 
 // then multiple up all the primes factored up to the highest factor levels found
 const lowest = primes.reduce((acc, prime) => acc * Math.pow(prime, primeFactors[prime]), 1);
 
-console.log('The smallest number divisible evenly by all the numbers between 1 and 20 is: ', lowest);
+console.log(`The smallest number divisible evenly by all the numbers between ${START_NUMBER} and ${END_NUMBER} is: ${lowest}`);
